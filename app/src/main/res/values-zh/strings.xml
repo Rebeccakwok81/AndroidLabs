@@ -3,4 +3,13 @@
     <string name="app_name">Chinese Labs</string>
     <string name="hello_message">你好!</string>
     <string name="ButtonText">我是按鈕</string>
+    <string name="CheckBoxText">按我</string>
+    <string name="SwitchText">開關</string>
+    <string name="hintText">輸入你的名字</string>
+    <string name="toast_message">更多資訊</string>
+    <string name="sw_on_message">開關打開</string>
+    <string name="sw_off_message">開關關閉</string>
+    <string name="undo_message">复原</string>
+
+
 </resources>
