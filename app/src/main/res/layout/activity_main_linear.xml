@@ -50,6 +50,7 @@
             android:id="@+id/imageButton"
             android:layout_width="241dp"
             android:layout_height="wrap_content"
+            android:contentDescription="Canad"
             android:gravity="fill"
             app:srcCompat="@drawable/flag" />
 
@@ -59,7 +60,8 @@
             android:layout_height="wrap_content"
             android:gravity="fill"
             android:minHeight="48dp"
-            android:text="@string/SwitchText" />
+            android:text="@string/SwitchText"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     </LinearLayout>
 
@@ -73,7 +75,7 @@
             android:id="@+id/editTextTextPersonName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
+            android:autofillHints="@string/hintText"
             android:ems="10"
             android:hint="@string/hintText"
             android:inputType="textPersonName|textCapWords"
