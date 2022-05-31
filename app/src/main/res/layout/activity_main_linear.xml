@@ -23,18 +23,16 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="241dp"
+            android:layout_height="wrap_content"
             android:gravity="fill"
             android:text="@string/ButtonText"
             tools:ignore="TouchTargetSizeCheck" />
 
         <CheckBox
             android:id="@+id/checkBox"
-            android:layout_width="match_parent"
+            android:layout_width="178dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="fill"
             android:text="@string/CheckBoxText"
             tools:ignore="TouchTargetSizeCheck" />
@@ -50,9 +48,8 @@
 
         <ImageButton
             android:id="@+id/imageButton"
-            android:layout_width="240dp"
-            android:layout_height="157dp"
-            android:layout_weight="1"
+            android:layout_width="241dp"
+            android:layout_height="wrap_content"
             android:gravity="fill"
             app:srcCompat="@drawable/flag" />
 
@@ -60,7 +57,6 @@
             android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="fill"
             android:minHeight="48dp"
             android:text="@string/SwitchText" />
@@ -77,10 +73,12 @@
             android:id="@+id/editTextTextPersonName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/hintText"
             android:inputType="textPersonName|textCapWords"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:textColorHint="#757575" />
 
     </LinearLayout>
 
