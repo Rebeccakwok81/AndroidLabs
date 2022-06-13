@@ -50,11 +50,11 @@
 
         <ImageButton
             android:id="@+id/imageButton"
-            android:layout_width="240dp"
-            android:layout_height="157dp"
+            android:layout_width="235dp"
+            android:layout_height="163dp"
             android:layout_weight="1"
             android:gravity="fill"
-            app:srcCompat="@drawable/flag" />
+            android:src="@drawable/flag" />
 
         <Switch
             android:id="@+id/switch1"
