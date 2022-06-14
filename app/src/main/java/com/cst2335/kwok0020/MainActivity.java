@@ -2,42 +2,45 @@ package com.cst2335.kwok0020;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
-import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.EditText;
 
-import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_constraint);
+        setContentView(R.layout.activity_profile_lab3);
 
+        EditText editText = findViewById(R.id.editText2);
         Button btn = findViewById(R.id.button);
-        Switch sw = findViewById(R.id.switch1);
 
+        SharedPreferences sp = getSharedPreferences("data", Context.MODE_PRIVATE);
+        String previous = sp.getString("editEmail", "");
+        editText.setText(previous);
 
-        btn.setOnClickListener( (vw) -> {
-                Toast.makeText(MainActivity.this, getString(R.string.toast_message), Toast.LENGTH_LONG).show();
+        btn.setOnClickListener(clk -> {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("editEmail", editText.getText().toString());
+            editor.apply();
+
+            Intent goToProfile = new Intent(MainActivity.this, ProfileActivity.class);
+            goToProfile.putExtra("EMAIL", editText.getText().toString());
+            startActivity(goToProfile);
 
         });
 
-        sw.setOnCheckedChangeListener((cb, b) ->{
-            if(sw.isChecked()){
-                Snackbar.make(cb, getString(R.string.sw_on_message), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.undo_message, click -> cb.setChecked((!b)))
-                        .show();
-            } else
-            Snackbar.make(cb, getString(R.string.sw_off_message), Snackbar.LENGTH_LONG)
-                    .setAction(R.string.undo_message, click -> cb.setChecked((!b)))
-                    .show();
-        });
+        }
+
+        @Override
+        protected void onPause() {
+        super.onPause();
 
         }
     }

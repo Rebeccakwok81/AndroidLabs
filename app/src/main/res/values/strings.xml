@@ -9,5 +9,16 @@
     <string name="sw_on_message">The switch is now on</string>
     <string name="sw_off_message">The switch is now off</string>
     <string name="undo_message">Undo</string>
+    <string name="req_email">Enter your email:</string>
+    <string name="enter_email">Type email here</string>
+    <string name="req_pw">Enter your password</string>
+    <string name="enter_pw">Type password here</string>
+    <string name="login">Login</string>
+    <string name="yourProfile">Your Profile</string>
+    <string name="name">Your Name:</string>
+    <string name="enter_name">Enter your name</string>
+    <string name="email">Your Email:</string>
+    <string name="picture">Your picture</string>
+    <string name="req_click">Click the button above to take a picture</string>
 
 </resources>

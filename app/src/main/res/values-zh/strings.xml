@@ -10,6 +10,17 @@
     <string name="sw_on_message">開關打開</string>
     <string name="sw_off_message">開關關閉</string>
     <string name="undo_message">复原</string>
+    <string name="req_email">請輸入你的電郵:</string>
+    <string name="enter_email">在此輸入電郵</string>
+    <string name="req_pw">請輸入你的密碼:</string>
+    <string name="enter_pw">在此輸入密碼</string>
+    <string name="login">登入</string>
+    <string name="yourProfile">你的資料</string>
+    <string name="name">名字</string>
+    <string name="enter_name">輸入名字</string>
+    <string name="email">電郵</string>
+    <string name="picture">圖片</string>
+    <string name="req_click">按這裡拍照</string>
 
 
 </resources>
