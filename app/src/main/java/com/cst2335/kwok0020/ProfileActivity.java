@@ -27,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ImageButton imgbtn = findViewById(R.id.imageButton2);
+
         ActivityResultLauncher<Intent> myPictureTakerLauncher =
                 registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
                         ,new ActivityResultCallback<ActivityResult>() {
@@ -52,6 +53,8 @@ public class ProfileActivity extends AppCompatActivity {
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 myPictureTakerLauncher.launch(takePictureIntent);
             }
+
+            myPictureTakerLauncher.launch(takePictureIntent);
 
             startActivity(takePictureIntent);
 
