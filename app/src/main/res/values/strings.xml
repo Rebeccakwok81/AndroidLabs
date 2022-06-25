@@ -20,5 +20,10 @@
     <string name="email">Your Email:</string>
     <string name="picture">Your picture</string>
     <string name="req_click">Click the button above to take a picture</string>
-
+    <string name="chat_button">Go to chat!</string>
+    <string name="msg">Type here</string>
+    <string name="send">Send</string>
+    <string name="received">Received</string>
+    <string name="send_text">send text</string>
+    <string name="received_text">received text</string>
 </resources>

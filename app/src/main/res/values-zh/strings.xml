@@ -21,6 +21,12 @@
     <string name="email">電郵</string>
     <string name="picture">圖片</string>
     <string name="req_click">按這裡拍照</string>
+    <string name="chat_button">去對話!</string>
+    <string name="msg">輸入</string>
+    <string name="send">發</string>
+    <string name="received">收</string>
+    <string name="send_text">字</string>
+    <string name="received_text">收字</string>
 
 
 </resources>

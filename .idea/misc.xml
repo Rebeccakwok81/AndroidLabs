@@ -5,6 +5,11 @@
       <map>
         <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/drawable/ic_launcher_background.xml" value="0.144" />
         <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/drawable/picture_frame.xml" value="0.1" />
+        <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_chatroom.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_chatroom_left.xml" value="0.20854700854700856" />
+        <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_chatroom_right.xml" value="0.264" />
+        <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_left.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_listview.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main_constraint.xml" value="0.23641304347826086" />
         <entry key="..\:/Users/szeman/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main_lab3.xml" value="0.4" />
