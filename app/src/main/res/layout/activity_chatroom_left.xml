@@ -4,28 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-
-    <TextView
-        android:id="@+id/sendText"
-        android:layout_width="88dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/send_text"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="wrap_content"
+    android:layout_gravity="left">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="48dp"
-        android:layout_height="45dp"
+        android:layout_width="50dp"
+        android:layout_height="42dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="30dp"
         android:src="@drawable/row_send"
-        app:layout_constraintEnd_toStartOf="@+id/sendText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sendMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginStart="60dp"
+        android:text="@string/send_text"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
