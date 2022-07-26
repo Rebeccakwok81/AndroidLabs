@@ -5,7 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ProfileActivity">
+    tools:context=".ProfileActivity"
+    android:layout_marginTop="27dp"
+    android:layout_marginBottom="27dp"
+    android:layout_marginLeft="48dp"
+    android:layout_marginRight="48dp"
+    >
 
     <TextView
         android:id="@+id/textView"
@@ -26,7 +31,11 @@
         android:ems="10"
         android:hint="@string/enter_name"
         android:inputType="textPersonName"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:nextFocusDown="@+id/item1"
+        android:nextFocusUp="@+id/item2"
+        android:nextFocusRight="@+id/item3"
+        android:nextFocusLeft="@+id/item4"/>
 
     <TextView
         android:id="@+id/textView4"
@@ -42,7 +51,11 @@
         android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
-        android:autofillHints="" />
+        android:autofillHints=""
+        android:nextFocusDown="@+id/item1"
+        android:nextFocusUp="@+id/item2"
+        android:nextFocusRight="@+id/item3"
+        android:nextFocusLeft="@+id/item4"/>
 
     <TextView
         android:id="@+id/textView5"
@@ -66,12 +79,20 @@
         android:id="@+id/chat_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/chat_button" />
+        android:text="@string/chat_button"
+        android:nextFocusDown="@+id/item1"
+        android:nextFocusUp="@+id/item2"
+        android:nextFocusRight="@+id/item3"
+        android:nextFocusLeft="@+id/item4"/>
 
     <Button
         android:id="@+id/weather_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/weather_btn_text"/>
+        android:text="@string/weather_btn_text"
+        android:nextFocusDown="@+id/item1"
+        android:nextFocusUp="@+id/item2"
+        android:nextFocusRight="@+id/item3"
+        android:nextFocusLeft="@+id/item4"/>
 
 </LinearLayout>
