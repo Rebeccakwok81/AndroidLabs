@@ -39,7 +39,7 @@ public class WeatherForecast extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather_forcast);
+        setContentView(R.layout.layout_notround);
 
         currentTem = findViewById(R.id.currentTem);
         max = findViewById(R.id.maxTem);

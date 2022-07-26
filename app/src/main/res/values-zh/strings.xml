@@ -28,6 +28,10 @@
     <string name="send_text">字</string>
     <string name="received_text">收字</string>
     <string name="weather_btn_text">看天氣</string>
+    <string name="value">現</string>
+    <string name="min">現</string>
+    <string name="max">現</string>
+    <string name="uv">Uv</string>
 
 
 </resources>
