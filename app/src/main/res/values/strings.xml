@@ -26,4 +26,5 @@
     <string name="received">Received</string>
     <string name="send_text">send text</string>
     <string name="received_text">received text</string>
+    <string name="weather_btn_text">Check Weather</string>
 </resources>

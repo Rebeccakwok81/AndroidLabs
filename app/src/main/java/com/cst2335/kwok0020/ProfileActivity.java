@@ -15,7 +15,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -65,6 +64,12 @@ public class ProfileActivity extends AppCompatActivity {
         Button chat = findViewById(R.id.chat_button);
         chat.setOnClickListener((vw) ->{
             Intent goToChatroom = new Intent(ProfileActivity.this, ChatRoomActivity.class);
+            startActivity(goToChatroom);
+        });
+
+        Button btn = findViewById(R.id.weather_btn);
+        btn.setOnClickListener((vw) ->{
+            Intent goToChatroom = new Intent(ProfileActivity.this, WeatherForecast.class);
             startActivity(goToChatroom);
         });
 

@@ -27,6 +27,7 @@
     <string name="received">收</string>
     <string name="send_text">字</string>
     <string name="received_text">收字</string>
+    <string name="weather_btn_text">看天氣</string>
 
 
 </resources>
