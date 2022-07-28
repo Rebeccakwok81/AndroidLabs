@@ -1,33 +1,29 @@
 package com.cst2335.kwok0020;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatRoomActivity extends AppCompatActivity {
 
     Button sendBtn;
     Button receivedBtn;
     EditText edit;
-    RecyclerView rView;
+    ListView listView;
     MyAdapter theAdapter;
     ArrayList<Message> messages = new ArrayList<>();
 
@@ -39,171 +35,121 @@ public class ChatRoomActivity extends AppCompatActivity {
         sendBtn = findViewById(R.id.sendButton);
         receivedBtn = findViewById(R.id.receiveButton);
         edit = findViewById(R.id.editMsg);
-        rView = findViewById(R.id.myRecycleView);
-
+        listView = findViewById(R.id.ListView);
 
         theAdapter = new MyAdapter();
-        rView.setAdapter(theAdapter);
-        rView.setLayoutManager(new LinearLayoutManager(this));
+        listView.setAdapter(theAdapter);
+
+        /*listView.setOnItemClickListener(( parent,  view,  position,  id) -> {
+            showContact( position );
+        });*/
+
 
         sendBtn.setOnClickListener( click ->{
             String type = edit.getText().toString();
+            if ( !type.isEmpty()) {
+                messages.add(new Message(type, true));
 
-            //add a new message to history if not empty
-            if (!type.isEmpty()) {
-                messages.add(new Message(type, 0, 1));
-                edit.setText(""); //clear the text
+                edit.setText("");//clear the text
+
                 //notify that new data was added at a row:
-                theAdapter.notifyItemInserted(messages.size() - 1); //at the end of ArrayList,
+                theAdapter.notifyDataSetChanged(); //at the end of ArrayList,
 
             }
-
         });
+
+
 
         receivedBtn.setOnClickListener( click ->{
             String type = edit.getText().toString();
-            //add a new message to history if not empty
-            if (!type.isEmpty()) {
-                messages.add(new Message(type, 1, 0));
-                edit.setText(""); //clear the text
+
+            if ( !type.isEmpty()) {
+                messages.add(new Message(type, false));
+
+                edit.setText("");//clear the text
+
                 //notify that new data was added at a row:
-                theAdapter.notifyItemInserted(messages.size() - 1); //at the end of ArrayList,
+                theAdapter.notifyDataSetChanged(); //at the end of ArrayList,
 
             }
+
+
         });
+
+        listView.setOnItemLongClickListener((p, b, pos, id) -> {
+
+            Message clicked = messages.get(pos);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoomActivity.this);
+            builder.setTitle("Question:")
+                    .setMessage("Do you want to delete this:" + clicked.getMessageTyped())
+                    .setNegativeButton("Negetive", (dialog, click1) -> {
+                    })
+                    .setPositiveButton("Positive", (dialog, click2) -> {
+                        //actually delete something:
+                        messages.remove(pos);
+                        theAdapter.notifyDataSetChanged();
+                    }).create().show();
+
+            return false;
+        });
+
 
 
     }
 
-    public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private static final int LAYOUT_LEFT = 0;
-        private static final int LAYOUT_RIGHT = 1;
-
-
+    public class MyAdapter extends BaseAdapter {
 
         @Override
-        public int getItemViewType(int position) {
-            if(messages.get(position).getSend() == 0)
-                return 0;
-            else
-                return 1;
-        }
-
-        //this holds TextViews on a row:
-        public class MyViewHolder1 extends RecyclerView.ViewHolder {
-
-            TextView messageView1;
-
-            public MyViewHolder1(View itemView) {
-                super(itemView);
-
-
-                messageView1 = itemView.findViewById(R.id.sendMsg);
-
-                itemView.setOnClickListener(click -> {
-                    int position = getAdapterPosition();//which row was clicked.
-                    Message clicked = messages.get(position);
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoomActivity.this);
-                    builder.setTitle("Question:")
-                            .setMessage("Do you want to delete this:" + clicked.getMessageTyped())
-                            .setNegativeButton("Negetive", (dialog, click1) -> {
-                            })
-                            .setPositiveButton("Positive", (dialog, click2) -> {
-                                //actually delete something:
-                                messages.remove(position);
-                                theAdapter.notifyItemRemoved(position);
-                            }).create().show();
-
-
-                });
-            }
-
-        }
-
-        public class MyViewHolder2 extends RecyclerView.ViewHolder {
-
-            TextView messageView2;
-
-            public MyViewHolder2 (View itemView) {
-                super(itemView);
-
-                messageView2 = itemView.findViewById(R.id.receiveMsg);
-
-                itemView.setOnClickListener(click -> {
-                    int position = getAdapterPosition();//which row was clicked.
-                    Message clicked = messages.get(position);
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoomActivity.this);
-                    builder.setTitle("Question:")
-                            .setMessage("Do you want to delete this:" + clicked.getMessageTyped())
-                            .setNegativeButton("Negetive", (dialog, click1) -> {
-                            })
-                            .setPositiveButton("Positive", (dialog, click2) -> {
-                                //actually delete something:
-                                messages.remove(position);
-                                theAdapter.notifyItemRemoved(position);
-                            }).create().show();
-
-
-                });
-            }
-
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-
-            switch (viewType){
-                case LAYOUT_LEFT:
-                    return new MyViewHolder1(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_chatroom_left, parent, false));
-                case LAYOUT_RIGHT:
-                    return new MyViewHolder2(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_chatroom_right, parent, false));
-
-            }
-
-            return null;
+        public int getViewTypeCount(){
+            return 2;
         }
 
         @Override
-        //Array to hold all the message
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-            final Message msg = messages.get(position);
-
-            if(holder.getItemViewType() == LAYOUT_LEFT){
-                MyViewHolder1 v1 = (MyViewHolder1) holder;
-                v1.messageView1.setText(messages.get(position).getMessageTyped());
-            } else {
-                MyViewHolder2 v2 = (MyViewHolder2) holder;
-                v2.messageView2.setText(messages.get(position).getMessageTyped());
-            }
-
-
-        }
-
-
-        @Override
-        public int getItemCount() {
+        public int getCount() {
             return messages.size();
         }
 
+        @Override
+        public Object getItem(int position) {
+            return position % 2;
+        }
 
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater li = getLayoutInflater();
+
+                if (messages.get(position).send() == true) {
+                    convertView = li.inflate(R.layout.activity_chatroom_left, parent, false);
+                    TextView send = convertView.findViewById(R.id.sendMsg);
+                    ImageView img = convertView.findViewById(R.id.sendIcon);
+                    send.setText(messages.get(position).getMessageTyped());
+                } else {
+                    convertView = li.inflate(R.layout.activity_chatroom_right, parent, false);
+                    TextView receive = convertView.findViewById(R.id.receiveMsg);
+                    ImageView img = convertView.findViewById(R.id.receiveIcon);
+                    receive.setText(messages.get(position).getMessageTyped());
+                }
+
+            return convertView;
+
+        }
 
     }
 
     public class Message {
         String messageTyped;
-        int send;
-        int received;
+        boolean send;
 
-
-        public Message(String messageTyped, int send, int received) {
+        public Message(String messageTyped, boolean send) {
 
             this.messageTyped = messageTyped;
             this.send = send;
-            this.received = received;
         }
 
         public String getMessageTyped() {
@@ -211,16 +157,14 @@ public class ChatRoomActivity extends AppCompatActivity {
             return messageTyped;
         }
 
-        public int getSend(){
+        public boolean send(){
             return send;
-        }
-
-        public int getReceived(){
-            return received;
         }
 
     }
 
-}
 
+
+
+}
 
