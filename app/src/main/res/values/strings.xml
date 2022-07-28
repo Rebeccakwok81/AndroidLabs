@@ -26,4 +26,6 @@
     <string name="received">Received</string>
     <string name="send_text">send text</string>
     <string name="received_text">received text</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.cst2335.kwok0020;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,10 @@ public class ChatRoomActivity extends AppCompatActivity {
     MyAdapter theAdapter;
     ArrayList<Message> messages = new ArrayList<>();
 
+    public static final String ITEM_SELECTED = "ITEM";
+    public static final String ITEM_POSITION = "POSITION";
+    public static final String ITEM_ID = "ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,10 +45,31 @@ public class ChatRoomActivity extends AppCompatActivity {
         theAdapter = new MyAdapter();
         listView.setAdapter(theAdapter);
 
-        /*listView.setOnItemClickListener(( parent,  view,  position,  id) -> {
-            showContact( position );
-        });*/
+        boolean isTablet = findViewById(R.id.fragmentLocation) != null; //check if the FrameLayout is loaded
 
+        listView.setOnItemClickListener((list, item, position, id)->{
+            //Create a bundle to pass data to the new fragment
+            Bundle dataToPass = new Bundle();
+            dataToPass.putString(ITEM_SELECTED, messages.get(position).messageTyped );
+            dataToPass.putInt(ITEM_POSITION, position);
+            dataToPass.putLong(ITEM_ID, id);
+
+            if(isTablet)
+            {
+                DetailsFragment dFragment = new DetailsFragment(); //add a DetailFragment
+                dFragment.setArguments( dataToPass ); //pass it a bundle for information
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentLocation, dFragment) //Add the fragment in FrameLayout
+                        .commit(); //actually load the fragment. Calls onCreate() in DetailFragment
+            }
+            else //isPhone
+            {
+                Intent nextActivity = new Intent(ChatRoomActivity.this, EmptyActivity.class);
+                nextActivity.putExtras(dataToPass); //send data to next activity
+                startActivity(nextActivity); //make the transition
+            }
+        });
 
         sendBtn.setOnClickListener( click ->{
             String type = edit.getText().toString();
