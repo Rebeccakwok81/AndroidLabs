@@ -15,31 +15,40 @@ public class MyOpener extends SQLiteOpenHelper {
     public final static String TABLE_NAME = "Messages";
     public final static String COL_ID = "_id";
     public final static String COL_MESSAGE = "Text";
-    public static final String COL_SEND_RECEIVE = "SendOrReceive";
+
 
     public MyOpener(Context context){
         super(context, DATABASE_NAME, null, VERSION_NUM);
     }
 
 
-    // should be the creation statement
+    //This function gets called if no database file exists.
+    //Look on your device in the /data/data/package-name/database directory.
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        //Create table MyData ( _id INTEGER PRIMARY KEY AUTOINCREMENT, Message TEXT, SendOrReceive INTEGER);
-        String result = String.format(" %s %s", "FirstString" , "10");
-
-        //                                      //TABLE_NAME               take care of id numbers
-        db.execSQL( String.format( "Create table %s ( %s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s  INTEGER);"
-                                       , TABLE_NAME, COL_ID,                       COL_MESSAGE, COL_SEND_RECEIVE ) );
+    public void onCreate(SQLiteDatabase db)
+    {
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   + COL_MESSAGE  + " text);");  // add or remove columns
     }
 
-    // delete current table, create a new one
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL( "Drop table if exists " + TABLE_NAME ); //deletes the current data
-        //create a new table:
 
-        this.onCreate(db); //calls function on line 26
+    //this function gets called if the database version on your device is lower than VERSION_NUM
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    {   //Drop the old table:
+        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_NAME);
+
+        //Create the new table:
+        onCreate(db);
     }
 
+    //this function gets called if the database version on your device is higher than VERSION_NUM
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    {   //Drop the old table:
+        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_NAME);
+
+        //Create the new table:
+        onCreate(db);
+    }
 }

@@ -1,41 +1,36 @@
 package com.cst2335.kwok0020;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
-
 
 public class ChatRoomActivity extends AppCompatActivity {
 
     Button sendBtn;
     Button receivedBtn;
     EditText edit;
-    RecyclerView rView;
+    ListView listView;
     MyAdapter theAdapter;
     ArrayList<Message> messages = new ArrayList<>();
-    MyOpener myOpener;
-    private SQLiteDatabase db;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,258 +40,198 @@ public class ChatRoomActivity extends AppCompatActivity {
         sendBtn = findViewById(R.id.sendButton);
         receivedBtn = findViewById(R.id.receiveButton);
         edit = findViewById(R.id.editMsg);
-        rView = findViewById(R.id.myRecycleView);
+        listView = findViewById(R.id.ListView);
 
         theAdapter = new MyAdapter();
-        rView.setAdapter(theAdapter);
-        rView.setLayoutManager(new LinearLayoutManager(this));
+        listView.setAdapter(theAdapter);
+
+        loadDataFromDatabase(); //get any previously saved Contact objects
 
 
-       myOpener = new MyOpener(this);
-        // open the database:
-        db = myOpener.getWritableDatabase();
 
-        //load from the database:
-        Cursor results = db.rawQuery( "Select * from " + MyOpener.TABLE_NAME + ";", null );//no arguments to the query
-
-        //Convert column names to indices:
-        //Convert column names to indices:
-        int idIndex = results.getColumnIndex( myOpener.COL_ID );
-        int  messageIndex = results.getColumnIndex( myOpener.COL_MESSAGE);
-        int sOrRIndex = results.getColumnIndex( myOpener.COL_SEND_RECEIVE);
-
-
-        //cursor is pointing to row -1
-        while( results.moveToNext() ) //returns false if no more data
-        { //pointing to row 2
-            int id = results.getInt(idIndex);
-            String message = results.getString(messageIndex);
-            //add to arrayList:
-            messages.add( new Message( message, 0, sOrRIndex, id ));
-        }
-
-        results.close();
-
-
-        sendBtn.setOnClickListener( click ->{
+        sendBtn.setOnClickListener(click -> {
             String type = edit.getText().toString();
 
+            //add to the database and get the new ID
+            ContentValues newRowValues = new ContentValues();
+            //Now provide a value for every database column defined in MyOpener.java:
+            //put string message in the MESSAGE column:
+            newRowValues.put(MyOpener.COL_MESSAGE, type);
 
-            //add a new message to history if not empty
+            //Now insert in the database:
+            long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+
+            //now you have the newId, you can create the Message object
+            Message newMsg = new Message(type, true, newId);
+
+            //update the listView:
+            theAdapter.notifyDataSetChanged();
+
             if (!type.isEmpty()) {
-                //insert into database
-                ContentValues newRow = new ContentValues();
+                messages.add(new Message(type, true, newId));
 
-                //Message column
-                newRow.put(myOpener.COL_MESSAGE, type);
+                edit.setText("");//clear the text
 
-                //Send or receive column:
-                newRow.put(myOpener.COL_SEND_RECEIVE, 0);
-
-                //insert in the database
-                long id = db.insert(myOpener.TABLE_NAME, null, newRow);
-
-                messages.add(new Message(type, 0, 1, id));
-                edit.setText(""); //clear the text
                 //notify that new data was added at a row:
-                theAdapter.notifyItemInserted(messages.size() - 1); //at the end of ArrayList,
-
-            }
-
-        });
-
-        receivedBtn.setOnClickListener( click ->{
-            String type = edit.getText().toString();
-
-
-            //add a new message to history if not empty
-            if (!type.isEmpty()) {
-
-                //insert into database
-                ContentValues newRow = new ContentValues();
-
-                //Message column
-                newRow.put(myOpener.COL_MESSAGE, type);
-
-                //Send or receive column:
-                newRow.put(myOpener.COL_SEND_RECEIVE, 0);
-
-                //insert in the database
-                long id = db.insert(myOpener.TABLE_NAME, null, newRow);
-
-
-                messages.add(new Message(type, 1, 0, id));
-                edit.setText(""); //clear the text
-                //notify that new data was added at a row:
-                theAdapter.notifyItemInserted(messages.size() - 1); //at the end of ArrayList,
+                theAdapter.notifyDataSetChanged(); //at the end of ArrayList,
 
             }
         });
 
 
+        receivedBtn.setOnClickListener(click -> {
+            String type = edit.getText().toString();
+
+            //add to the database and get the new ID
+            ContentValues newRowValues = new ContentValues();
+            //Now provide a value for every database column defined in MyOpener.java:
+            //put string message in the MESSAGE column:
+            newRowValues.put(MyOpener.COL_MESSAGE, type);
+
+            //Now insert in the database:
+            long newId = db.insert(MyOpener.TABLE_NAME, null, newRowValues);
+
+            //now you have the newId, you can create the Message object
+            Message newMsg = new Message(type, false, newId);
+
+            //update the listView:
+            theAdapter.notifyDataSetChanged();
+
+
+            if (!type.isEmpty()) {
+                messages.add(new Message(type, false, newId));
+
+                edit.setText("");//clear the text
+
+                //notify that new data was added at a row:
+                theAdapter.notifyDataSetChanged(); //at the end of ArrayList,
+
+            }
+
+
+        });
+
+        listView.setOnItemLongClickListener((p, b, pos, id) -> {
+
+            Message clicked = messages.get(pos);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoomActivity.this);
+            builder.setTitle("Question:")
+                    .setMessage("Do you want to delete this:" + clicked.getMessageTyped())
+                    .setNegativeButton("Negetive", (dialog, click1) -> {
+                    })
+                    .setPositiveButton("Positive", (dialog, click2) -> {
+                        deleteContact(messages.get(pos)); //remove the msg from database
+                        messages.remove(pos);//remove the msg from message list
+                        theAdapter.notifyDataSetChanged();
+                    }).create().show();
+
+            return false;
+        });
 
 
     }
 
+    private void loadDataFromDatabase() {
 
-    public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private static final int LAYOUT_LEFT = 0;
-        private static final int LAYOUT_RIGHT = 1;
+        //get a database connection:
+        MyOpener dbOpener = new MyOpener(this);
+        db = dbOpener.getWritableDatabase(); //This calls onCreate() if you've never built the table before, or onUpgrade if the version here is newer
 
 
+        // We want to get all of the columns. Look at MyOpener.java for the definitions:
+        String [] columns = {MyOpener.COL_ID, MyOpener.COL_MESSAGE};
+        //query all the results from the database:
+        Cursor results = db.query(false, MyOpener.TABLE_NAME, columns, null, null, null, null, null, null);
+
+        //Now the results object has rows of results that match the query.
+        //find the column indices:
+        int msgColumnIndex = results.getColumnIndex(MyOpener.COL_MESSAGE);
+        int idColIndex = results.getColumnIndex(MyOpener.COL_ID);
+
+        //iterate over the results, return true if there is a next item:
+        while(results.moveToNext())
+        {
+            String msg = results.getString(msgColumnIndex);
+            long id = results.getLong(idColIndex);
+
+            //add the new Contact to the array list:
+            messages.add(new Message(msg,true, id));
+        }
+
+    }
+
+    protected void deleteContact(Message m)
+    {
+        db.delete(MyOpener.TABLE_NAME, MyOpener.COL_ID + "= ?", new String[] {Long.toString(m.getId())});
+    }
+
+    public void printCursor( Cursor c, int version)
+    {
+        String result;
+        String cursorRows = "";
+        int dbVersion = db.getVersion();
+        int col = c.getColumnCount();
+        String[] columnNames = c.getColumnNames();
+        int row =  c.getCount();
+        result = "Version "+ dbVersion + "colums " + col + "Colum Names " + columnNames + "row " + row;
+        for( c.moveToFirst(); !c.isAfterLast(); c.moveToNext())
+        {
+            cursorRows += c.getString(0) + c.getString(1) + c.getString(2);
+
+        }
+        Log.i(result, "this is a test");
+
+    }
+
+    public class MyAdapter extends BaseAdapter {
 
         @Override
-        public int getItemViewType(int position) {
-            if(messages.get(position).getSend() == 0)
-                return 0;
-            else
-                return 1;
-        }
-
-        //this holds TextViews on a row:
-        public class MyViewHolder1 extends RecyclerView.ViewHolder {
-
-            TextView messageView1;
-
-            public MyViewHolder1(View itemView) {
-                super(itemView);
-
-
-                messageView1 = itemView.findViewById(R.id.sendMsg);
-
-                itemView.setOnLongClickListener(click -> {
-                    int position = getAdapterPosition();//which row was clicked.
-                    Message clicked = messages.get(position);
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoomActivity.this);
-                    builder.setTitle("Question:")
-                            .setMessage("Do you want to delete this:" + clicked.getMessageTyped())
-                            .setNegativeButton("Negative", (dialog, click1)->{ })
-                            .setPositiveButton("Positive", (dialog, click2)->{
-                                //actually delete something:
-                                messages.remove(position);
-                                theAdapter.notifyItemRemoved(position);
-                                Snackbar.make(sendBtn, "You removed item # " + position, Snackbar.LENGTH_LONG)
-                                        .setAction("Undo", (click4)-> {
-                                            messages.add(position, clicked);
-                                            theAdapter.notifyItemInserted(position);
-                                            //reinsert into the database
-                                            db.execSQL( String.format( Locale.CANADA, " Insert into %s values (\"%d\", \"%s\", \"%d\");",
-                                                    MyOpener.TABLE_NAME , clicked.getId()  , clicked.getMessageTyped() , 1 ));
-
-                                        })
-                                        .show();
-                                //delete from database:, returns number of rows deleted
-                                db.delete(MyOpener.TABLE_NAME,
-                                        MyOpener.COL_ID +" = ?", new String[] { Long.toString( clicked.getId() )  });
-                            }).create().show();
-
-                    return  true;
-                });
-
-
-            }
-
-        }
-
-        public class MyViewHolder2 extends RecyclerView.ViewHolder {
-
-            TextView messageView2;
-
-            public MyViewHolder2 (View itemView) {
-                super(itemView);
-
-                messageView2 = itemView.findViewById(R.id.receiveMsg);
-
-                itemView.setOnLongClickListener(click -> {
-                    int position = getAdapterPosition();//which row was clicked.
-                    Message clicked = messages.get(position);
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoomActivity.this);
-                    builder.setTitle("Question:")
-                            .setMessage("Do you want to delete this:" + clicked.getMessageTyped())
-                            .setNegativeButton("Negative", (dialog, click1)->{ })
-                            .setPositiveButton("Positive", (dialog, click2)->{
-                                //actually delete something:
-                                messages.remove(position);
-                                theAdapter.notifyItemRemoved(position);
-                                Snackbar.make(sendBtn, "You removed item # " + position, Snackbar.LENGTH_LONG)
-                                        .setAction("Undo", (click4)-> {
-                                            messages.add(position, clicked);
-                                            theAdapter.notifyItemInserted(position);
-                                            //reinsert into the database
-                                            db.execSQL( String.format( Locale.CANADA, " Insert into %s values (\"%d\", \"%s\", \"%d\");",
-                                                    MyOpener.TABLE_NAME , clicked.getId()  , clicked.getMessageTyped() , 0 ));
-
-                                        })
-                                        .show();
-                                //delete from database:, returns number of rows deleted
-                                db.delete(MyOpener.TABLE_NAME,
-                                        MyOpener.COL_ID +" = ?", new String[] { Long.toString( clicked.getId() )  });
-                            }).create().show();
-
-                    return  true;
-
-                });
-            }
-
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-
-            switch (viewType){
-                case LAYOUT_LEFT:
-                    return new MyViewHolder1(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_chatroom_left, parent, false));
-                case LAYOUT_RIGHT:
-                    return new MyViewHolder2(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_chatroom_right, parent, false));
-
-            }
-
-            return null;
-        }
-
-        @Override
-        //Array to hold all the message
-        public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-            final Message msg = messages.get(position);
-
-            if(holder.getItemViewType() == LAYOUT_LEFT){
-                MyViewHolder1 v1 = (MyViewHolder1) holder;
-                v1.messageView1.setText(messages.get(position).getMessageTyped());
-            } else {
-                MyViewHolder2 v2 = (MyViewHolder2) holder;
-                v2.messageView2.setText(messages.get(position).getMessageTyped());
-            }
-
-
-        }
-
-
-        @Override
-        public int getItemCount() {
+        public int getCount() {
             return messages.size();
         }
 
+        @Override
+        public Object getItem(int position) {
+            return position % 2;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater li = getLayoutInflater();
+
+            if (messages.get(position).send() == true) {
+                convertView = li.inflate(R.layout.activity_chatroom_left, parent, false);
+                TextView send = convertView.findViewById(R.id.sendMsg);
+                ImageView img = convertView.findViewById(R.id.sendIcon);
+                send.setText(messages.get(position).getMessageTyped());
+            } else {
+                convertView = li.inflate(R.layout.activity_chatroom_right, parent, false);
+                TextView receive = convertView.findViewById(R.id.receiveMsg);
+                ImageView img = convertView.findViewById(R.id.receiveIcon);
+                receive.setText(messages.get(position).getMessageTyped());
+            }
+
+            return convertView;
+
+        }
+
     }
-
-
-
 
     public class Message {
         String messageTyped;
-        int send;
-        int received;
+        boolean send;
         long id;
 
-
-        public Message(String messageTyped, int send, int received, long id) {
+        public Message(String messageTyped, boolean send, long id) {
 
             this.messageTyped = messageTyped;
             this.send = send;
-            this.received = received;
             this.id = id;
         }
 
@@ -305,12 +240,8 @@ public class ChatRoomActivity extends AppCompatActivity {
             return messageTyped;
         }
 
-        public int getSend(){
+        public boolean send() {
             return send;
-        }
-
-        public int getReceived(){
-            return received;
         }
 
         public long getId(){
@@ -320,5 +251,6 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
 }
+
 
 
