@@ -68,6 +68,12 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(goToChatroom);
         });
 
+        Button weather = findViewById(R.id.button2);
+        weather.setOnClickListener((vw) ->{
+            Intent goToChatroom = new Intent(ProfileActivity.this, WeatherForecast.class);
+            startActivity(goToChatroom);
+        });
+
 
     }
 

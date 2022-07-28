@@ -37,6 +37,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     public static final String ITEM_POSITION = "POSITION";
     public static final String ITEM_ID = "ID";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         listView.setAdapter(theAdapter);
 
         loadDataFromDatabase(); //get any previously saved Contact objects
+
+        DetailsFragment dFragment = new DetailsFragment(); //add a DetailFragment
 
 
 
@@ -129,6 +133,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                         deleteContact(messages.get(pos)); //remove the msg from database
                         messages.remove(pos);//remove the msg from message list
                         theAdapter.notifyDataSetChanged();
+                        getSupportFragmentManager().beginTransaction().remove(dFragment).commit();
                     }).create().show();
 
             return false;
@@ -145,7 +150,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             if(isTablet)
             {
-                DetailsFragment dFragment = new DetailsFragment(); //add a DetailFragment
+
                 dFragment.setArguments( dataToPass ); //pass it a bundle for information
                 getSupportFragmentManager()
                         .beginTransaction()
